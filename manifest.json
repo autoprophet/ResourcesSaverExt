@@ -1,0 +1,21 @@
+{
+   "background": {
+      "scripts": [ "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": "icon.gif",
+      "default_popup": "popup.html",
+      "default_title": "UP"
+   },
+   "description": "UP - Save all resources files with retaining folder structure.",
+   "devtools_page": "devtool.html",
+   "icons": {
+      "128": "icon.gif"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnolmUClW0WNsy3afUWJ2UP2igowdQ+7qGwhnTsjj1jkyNLdW+geL4M0/wGs0v54w6rLk5KvN+b/I70LJI7Fc9qNQs3V75G+30Ig+V0xXt2nqvieqQu7Q1SFmzDcTc2jf9m166SnumEdAoRUvIXaNj5BJoKP4YIioWL/3jFmK5+00SWbQrmZsNhn/B79S5bjbQsv7FLl3AjFIjp8m6IsOZSIGA8lFw94D7RKDVrJNy/vhbCfIIM1G1yVYeT0Z4XcQ4oqIhJBjIl8jUsSCTMH5oOW8ncwHx44lRu2mf8l3vbFdAM2lpgjfksLRHj+GLCWrBYj3djKMROW5wr/RvNJn3wIDAQAB",
+   "manifest_version": 2,
+   "name": "Save All Resources",
+   "permissions": [ "tabs", "http://*/", "https://*/", "*://*/*", "downloads", "downloads.shelf" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.1.8"
+}
