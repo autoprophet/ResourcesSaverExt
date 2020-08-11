@@ -1,12 +1,12 @@
 /* jshint worker:true */
-(function main(global) {
+const main = (global) => {
 	"use strict";
 
 	if (global.zWorkerInitialized)
 		throw new Error('z-worker.js should be run only once');
 	global.zWorkerInitialized = true;
 
-	addEventListener("message", function(event) {
+	addEventListener("message", (event) => {
 		var message = event.data, type = message.type, sn = message.sn;
 		var handler = handlers[type];
 		if (handler) {
@@ -123,7 +123,7 @@
 	Crc32.prototype.get = function get() {
 		return ~this.crc;
 	};
-	Crc32.prototype.table = (function() {
+	Crc32.prototype.table = (() => {
 		var i, j, t, table = []; // Uint32Array is actually slower than []
 		for (i = 0; i < 256; i++) {
 			t = i;
@@ -140,8 +140,10 @@
 	// "no-op" codec
 	function NOOP() {}
 	global.NOOP = NOOP;
-	NOOP.prototype.append = function append(bytes, onprogress) {
+	NOOP.prototype.append = (bytes, onprogress) => {
 		return bytes;
 	};
-	NOOP.prototype.flush = function flush() {};
-})(this);
+	NOOP.prototype.flush = () => {};
+};
+
+main(this);

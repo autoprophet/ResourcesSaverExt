@@ -33,7 +33,7 @@
  * and contributors of zlib.
  */
 
-(function(global) {
+((global) => {
 	"use strict";
 
 	// Global
@@ -732,7 +732,7 @@
 			return Z_OK;
 		}
 
-		that.init = function(bl, bd, tl, tl_index, td, td_index) {
+		that.init = (bl, bd, tl, tl_index, td, td_index) => {
 			mode = START;
 			lbits = /* (byte) */bl;
 			dbits = /* (byte) */bd;
@@ -743,7 +743,7 @@
 			tree = null;
 		};
 
-		that.proc = function(s, z, r) {
+		that.proc = (s, z, r) => {
 			var j; // temporary storage
 			var tindex; // temporary pointer
 			var e; // extra bits or operation
@@ -1102,7 +1102,7 @@
 			}
 		};
 
-		that.free = function() {
+		that.free = () => {
 			// ZFREE(z, c);
 		};
 
@@ -1155,7 +1155,7 @@
 		that.read = 0; // window read pointer
 		that.write = 0; // window write pointer
 
-		that.reset = function(z, c) {
+		that.reset = (z, c) => {
 			if (c)
 				c[0] = check;
 			// if (mode == BTREE || mode == DTREE) {
@@ -1172,7 +1172,7 @@
 		that.reset(z, null);
 
 		// copy as much as possible from the sliding window to the output area
-		that.inflate_flush = function(z, r) {
+		that.inflate_flush = (z, r) => {
 			var n;
 			var p;
 			var q;
@@ -1229,7 +1229,7 @@
 			return r;
 		};
 
-		that.proc = function(z, r) {
+		that.proc = (z, r) => {
 			var t; // temporary storage
 			var b; // bit buffer
 			var k; // bits in bit buffer
@@ -1730,21 +1730,21 @@
 			}
 		};
 
-		that.free = function(z) {
+		that.free = (z) => {
 			that.reset(z, null);
 			that.window = null;
 			hufts = null;
 			// ZFREE(z, s);
 		};
 
-		that.set_dictionary = function(d, start, n) {
+		that.set_dictionary = (d, start, n) => {
 			that.window.set(d.subarray(start, start + n), 0);
 			that.read = that.write = n;
 		};
 
 		// Returns true if inflate is currently at the end of a block generated
 		// by Z_SYNC_FLUSH or Z_FULL_FLUSH.
-		that.sync_point = function() {
+		that.sync_point = () => {
 			return mode == LENS ? 1 : 0;
 		};
 
@@ -1801,7 +1801,7 @@
 			return Z_OK;
 		}
 
-		that.inflateEnd = function(z) {
+		that.inflateEnd = (z) => {
 			if (that.blocks)
 				that.blocks.free(z);
 			that.blocks = null;
@@ -1809,7 +1809,7 @@
 			return Z_OK;
 		};
 
-		that.inflateInit = function(z, w) {
+		that.inflateInit = (z, w) => {
 			z.msg = null;
 			that.blocks = null;
 
@@ -1827,7 +1827,7 @@
 			return Z_OK;
 		};
 
-		that.inflate = function(z, f) {
+		that.inflate = (z, f) => {
 			var r;
 			var b;
 
@@ -1960,7 +1960,7 @@
 			}
 		};
 
-		that.inflateSetDictionary = function(z, dictionary, dictLength) {
+		that.inflateSetDictionary = (z, dictionary, dictLength) => {
 			var index = 0;
 			var length = dictLength;
 			if (!z || !z.istate || z.istate.mode != DICT0)
@@ -1975,7 +1975,7 @@
 			return Z_OK;
 		};
 
-		that.inflateSync = function(z) {
+		that.inflateSync = (z) => {
 			var n; // number of bytes to look at
 			var p; // pointer to bytes
 			var m; // number of marker bytes found in a row
@@ -2032,7 +2032,7 @@
 		// but removes the length bytes of the resulting empty stored block. When
 		// decompressing, PPP checks that at the end of input packet, inflate is
 		// waiting for these length bytes.
-		that.inflateSyncPoint = function(z) {
+		that.inflateSyncPoint = (z) => {
 			if (!z || !z.istate || !z.istate.blocks)
 				return Z_STREAM_ERROR;
 			return z.istate.blocks.sync_point();
@@ -2045,7 +2045,7 @@
 	}
 
 	ZStream.prototype = {
-		inflateInit : function(bits) {
+		inflateInit : (bits) => {
 			var that = this;
 			that.istate = new Inflate();
 			if (!bits)
@@ -2053,14 +2053,14 @@
 			return that.istate.inflateInit(that, bits);
 		},
 
-		inflate : function(f) {
+		inflate : (f) => {
 			var that = this;
 			if (!that.istate)
 				return Z_STREAM_ERROR;
 			return that.istate.inflate(that, f);
 		},
 
-		inflateEnd : function() {
+		inflateEnd : () => {
 			var that = this;
 			if (!that.istate)
 				return Z_STREAM_ERROR;
@@ -2069,23 +2069,23 @@
 			return ret;
 		},
 
-		inflateSync : function() {
+		inflateSync : () => {
 			var that = this;
 			if (!that.istate)
 				return Z_STREAM_ERROR;
 			return that.istate.inflateSync(that);
 		},
-		inflateSetDictionary : function(dictionary, dictLength) {
+		inflateSetDictionary : (dictionary, dictLength) => {
 			var that = this;
 			if (!that.istate)
 				return Z_STREAM_ERROR;
 			return that.istate.inflateSetDictionary(that, dictionary, dictLength);
 		},
-		read_byte : function(start) {
+		read_byte : (start) => {
 			var that = this;
 			return that.next_in.subarray(start, start + 1)[0];
 		},
-		read_buf : function(start, size) {
+		read_buf : (start, size) => {
 			var that = this;
 			return that.next_in.subarray(start, start + size);
 		}
@@ -2104,7 +2104,7 @@
 		z.inflateInit();
 		z.next_out = buf;
 
-		that.append = function(data, onprogress) {
+		that.append = (data, onprogress) => {
 			var err, buffers = [], lastIndex = 0, bufferIndex = 0, bufferSize = 0, array;
 			if (data.length === 0)
 				return;
@@ -2138,13 +2138,13 @@
 				}
 			} while (z.avail_in > 0 || z.avail_out === 0);
 			array = new Uint8Array(bufferSize);
-			buffers.forEach(function(chunk) {
+			buffers.forEach((chunk) => {
 				array.set(chunk, bufferIndex);
 				bufferIndex += chunk.length;
 			});
 			return array;
 		};
-		that.flush = function() {
+		that.flush = () => {
 			z.inflateEnd();
 		};
 	}

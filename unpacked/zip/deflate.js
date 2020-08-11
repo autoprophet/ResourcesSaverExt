@@ -33,7 +33,7 @@
  * and contributors of zlib.
  */
 
-(function(global) {
+((global) => {
 	"use strict";
 
 	// Global
@@ -255,7 +255,7 @@
 		// OUT assertions: the fields len and code are set to the optimal bit length
 		// and corresponding code. The length opt_len is updated; static_len is
 		// also updated if stree is not null. The field max_code is set.
-		that.build_tree = function(s) {
+		that.build_tree = (s) => {
 			var tree = that.dyn_tree;
 			var stree = that.stat_desc.static_tree;
 			var elems = that.stat_desc.elems;
@@ -352,7 +352,7 @@
 	// Mapping from a distance to a distance code. dist is the distance - 1 and
 	// must not have side effects. _dist_code[256] and _dist_code[257] are never
 	// used.
-	Tree.d_code = function(dist) {
+	Tree.d_code = (dist) => {
 		return ((dist) < 256 ? _dist_code[dist] : _dist_code[256 + ((dist) >>> 7)]);
 	};
 
@@ -1621,7 +1621,7 @@
 			return Z_OK;
 		}
 
-		that.deflateInit = function(strm, _level, bits, _method, memLevel, _strategy) {
+		that.deflateInit = (strm, _level, bits, _method, memLevel, _strategy) => {
 			if (!_method)
 				_method = Z_DEFLATED;
 			if (!memLevel)
@@ -1680,7 +1680,7 @@
 			return deflateReset(strm);
 		};
 
-		that.deflateEnd = function() {
+		that.deflateEnd = () => {
 			if (status != INIT_STATE && status != BUSY_STATE && status != FINISH_STATE) {
 				return Z_STREAM_ERROR;
 			}
@@ -1694,7 +1694,7 @@
 			return status == BUSY_STATE ? Z_DATA_ERROR : Z_OK;
 		};
 
-		that.deflateParams = function(strm, _level, _strategy) {
+		that.deflateParams = (strm, _level, _strategy) => {
 			var err = Z_OK;
 
 			if (_level == Z_DEFAULT_COMPRESSION) {
@@ -1720,7 +1720,7 @@
 			return err;
 		};
 
-		that.deflateSetDictionary = function(strm, dictionary, dictLength) {
+		that.deflateSetDictionary = (strm, dictionary, dictLength) => {
 			var length = dictLength;
 			var n, index = 0;
 
@@ -1753,7 +1753,7 @@
 			return Z_OK;
 		};
 
-		that.deflate = function(_strm, flush) {
+		that.deflate = (_strm, flush) => {
 			var i, header, level_flags, old_flush, bstate;
 
 			if (flush > Z_FINISH || flush < 0) {
@@ -1895,7 +1895,7 @@
 	}
 
 	ZStream.prototype = {
-		deflateInit : function(level, bits) {
+		deflateInit : (level, bits) => {
 			var that = this;
 			that.dstate = new Deflate();
 			if (!bits)
@@ -1903,7 +1903,7 @@
 			return that.dstate.deflateInit(that, level, bits);
 		},
 
-		deflate : function(flush) {
+		deflate : (flush) => {
 			var that = this;
 			if (!that.dstate) {
 				return Z_STREAM_ERROR;
@@ -1911,7 +1911,7 @@
 			return that.dstate.deflate(that, flush);
 		},
 
-		deflateEnd : function() {
+		deflateEnd : () => {
 			var that = this;
 			if (!that.dstate)
 				return Z_STREAM_ERROR;
@@ -1920,14 +1920,14 @@
 			return ret;
 		},
 
-		deflateParams : function(level, strategy) {
+		deflateParams : (level, strategy) => {
 			var that = this;
 			if (!that.dstate)
 				return Z_STREAM_ERROR;
 			return that.dstate.deflateParams(that, level, strategy);
 		},
 
-		deflateSetDictionary : function(dictionary, dictLength) {
+		deflateSetDictionary : (dictionary, dictLength) => {
 			var that = this;
 			if (!that.dstate)
 				return Z_STREAM_ERROR;
@@ -1939,7 +1939,7 @@
 		// this function so some applications may wish to modify it to avoid
 		// allocating a large strm->next_in buffer and copying from it.
 		// (See also flush_pending()).
-		read_buf : function(buf, start, size) {
+		read_buf : (buf, start, size) => {
 			var that = this;
 			var len = that.avail_in;
 			if (len > size)
@@ -1957,7 +1957,7 @@
 		// through this function so some applications may wish to modify it
 		// to avoid allocating a large strm->next_out buffer and copying into it.
 		// (See also read_buf()).
-		flush_pending : function() {
+		flush_pending : () => {
 			var that = this;
 			var len = that.dstate.pending;
 
@@ -2001,7 +2001,7 @@
 		z.deflateInit(level);
 		z.next_out = buf;
 
-		that.append = function(data, onprogress) {
+		that.append = (data, onprogress) => {
 			var err, buffers = [], lastIndex = 0, bufferIndex = 0, bufferSize = 0, array;
 			if (!data.length)
 				return;
@@ -2026,13 +2026,13 @@
 				}
 			} while (z.avail_in > 0 || z.avail_out === 0);
 			array = new Uint8Array(bufferSize);
-			buffers.forEach(function(chunk) {
+			buffers.forEach((chunk) => {
 				array.set(chunk, bufferIndex);
 				bufferIndex += chunk.length;
 			});
 			return array;
 		};
-		that.flush = function() {
+		that.flush = () => {
 			var err, buffers = [], bufferIndex = 0, bufferSize = 0, array;
 			do {
 				z.next_out_index = 0;
@@ -2046,7 +2046,7 @@
 			} while (z.avail_in > 0 || z.avail_out === 0);
 			z.deflateEnd();
 			array = new Uint8Array(bufferSize);
-			buffers.forEach(function(chunk) {
+			buffers.forEach((chunk) => {
 				array.set(chunk, bufferIndex);
 				bufferIndex += chunk.length;
 			});
